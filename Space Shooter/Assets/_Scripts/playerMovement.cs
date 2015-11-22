@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityStandardAssets.CrossPlatformInput;;;;
 [System.Serializable]
 public class Boundary
 {
@@ -17,6 +17,7 @@ public class playerMovement : MonoBehaviour
     public GameObject shot;
     public GameObject gunSFX;
     public GameObject explosion;
+    public Joystick jstick;
     public Boundary boundary;
     public Transform gun1,gun2;
     private Rigidbody rb = new Rigidbody();
@@ -46,60 +47,10 @@ public class playerMovement : MonoBehaviour
 
 	void FixedUpdate()
     {
+        Vector3 movement = new Vector3(CrossPlatformInputManager.GetAxis("Horizontal") * speed, 0.0f, CrossPlatformInputManager.GetAxis("Vertical"));
+        rb.velocity = movement;
         rb.position = new Vector3(Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax), 1.0f, Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax));
         rb.rotation = Quaternion.Euler((rb.velocity.x * -tilt) + 90.0f, 270.0f, 0.0f);
-    }
-    void Left(bool move)
-    {
-        if(move)
-        {
-            Vector3 movement = new Vector3(-1 * speed, 0.0f, 0.0f);
-            rb.velocity = movement;
-        }
-        else
-        {
-            Vector3 movement = new Vector3(0.0f, 0.0f, 0.0f);
-            rb.velocity = movement;
-        }
-    }
-    void Right(bool move)
-    {
-        if(move)
-        {
-            Vector3 movement = new Vector3(1 * speed, 0.0f, 0.0f);
-            rb.velocity = movement;
-        }
-        else
-        {
-            Vector3 movement = new Vector3(0.0f, 0.0f, 0.0f);
-            rb.velocity = movement;
-        }
-    }
-    void Up(bool move)
-    {
-        if (move)
-        {
-            Vector3 movement = new Vector3(0.0f, 0.0f, 1 * speed);
-            rb.velocity = movement;
-        }
-        else
-        {
-            Vector3 movement = new Vector3(0.0f, 0.0f, 0.0f);
-            rb.velocity = movement;
-        }
-    }
-    void Down(bool move)
-    {
-        if (move)
-        {
-            Vector3 movement = new Vector3(0.0f, 0.0f, -1 * speed);
-            rb.velocity = movement;
-        }
-        else
-        {
-            Vector3 movement = new Vector3(0.0f, 0.0f, 0.0f);
-            rb.velocity = movement;
-        }
     }
 
     void OnTriggerEnter(Collider other)
