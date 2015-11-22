@@ -16,6 +16,7 @@ public class EnemyCore : MonoBehaviour
     public GameObject explosion;
     private Rigidbody rb = new Rigidbody();
     public Transform gun1, gun2, gun3, gun4;
+	public enum ShotPathType {Forward,CurveLeft,CurveRight,Wiggle};
 
     void Start ()
     {
@@ -39,9 +40,13 @@ public class EnemyCore : MonoBehaviour
     {
         if (Time.time > nextFire)
         {
+			ShotPathType shotPathType = (ShotPathType)0;
+			if(Random.Range (0,3)==0)
+				shotPathType = (ShotPathType)Random.Range (1,System.Enum.GetNames(typeof(ShotPathType)).Length);
             nextFire = Time.time + fireRate;
-            Instantiate(shot, gun1.position, gun1.rotation);
-            gunSFX.GetComponent<AudioSource>().Play();
+            GameObject bullet = Instantiate(shot, gun1.position, gun1.rotation) as GameObject;
+			bullet.SendMessage ("BulletPath",shotPathType);
+			gunSFX.GetComponent<AudioSource>().Play();
         }
         if (hp < 1)
         {
@@ -71,7 +76,7 @@ public class EnemyCore : MonoBehaviour
                     rb.AddForce(transform.up * speed);
                     movementSeq = 3;
                 }
-                else if (movementSeq == 3) 
+                else if (movementSeq == 3)
                 {
                     rb.AddForce(-transform.up * speed);
                     movementSeq = 4;
