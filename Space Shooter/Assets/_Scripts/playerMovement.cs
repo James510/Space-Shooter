@@ -51,7 +51,7 @@ public class playerMovement : MonoBehaviour
             GetComponent<Renderer>().enabled = false;
             invincible = true;
             hp = 1;
-            transform.position=new Vector3(0.0f,1.0f,0.0f);
+            transform.position=new Vector3(0.0f,213.0f,2.3f);
             StartCoroutine("InvincibleWait", 5.0f);
         }
         if(invincible)
