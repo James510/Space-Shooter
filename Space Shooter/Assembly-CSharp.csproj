@@ -45,12 +45,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\DestroySelf.cs" />
      <Compile Include="Assets\_Scripts\Asteroid.cs" />
      <Compile Include="Assets\_Scripts\AsteroidMed.cs" />
      <Compile Include="Assets\_Scripts\Bullet.cs" />
+     <Compile Include="Assets\_Scripts\DestroySelf.cs" />
      <Compile Include="Assets\_Scripts\EnemyBulletCore.cs" />
      <Compile Include="Assets\_Scripts\EnemyCore.cs" />
+     <Compile Include="Assets\_Scripts\FireButton.cs" />
      <Compile Include="Assets\_Scripts\GameController.cs" />
      <Compile Include="Assets\_Scripts\boundaryDestroy.cs" />
      <Compile Include="Assets\_Scripts\playerMovement.cs" />

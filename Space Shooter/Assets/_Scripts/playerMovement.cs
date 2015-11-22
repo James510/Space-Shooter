@@ -15,6 +15,10 @@ public class playerMovement : MonoBehaviour
     public float tilt;
     public float fireRate;
     private float nextFire;
+    private float flash;
+    private bool flashOn;
+    private bool fire;
+    private bool invincible;
     public GameObject shot;
     public GameObject gunSFX;
     public GameObject explosion;
@@ -26,11 +30,13 @@ public class playerMovement : MonoBehaviour
     void Start()
     {
         rb=GetComponent<Rigidbody>();
+        invincible = false;
+        flashOn = true;
     }
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.Z) && Time.time > nextFire)
+        if(fire && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
             Instantiate(shot, gun1.position, gun1.rotation);
@@ -42,10 +48,34 @@ public class playerMovement : MonoBehaviour
             Instantiate(explosion, transform.position, transform.rotation);
             Instantiate(explosion, transform.position, transform.rotation);
             Instantiate(explosion, transform.position, transform.rotation);
-            Destroy(gameObject);
+            GetComponent<Renderer>().enabled = false;
+            invincible = true;
+            hp = 1;
+            transform.position=new Vector3(0.0f,1.0f,0.0f);
+            StartCoroutine("InvincibleWait", 5.0f);
+        }
+        if(invincible)
+        {
+            if (Time.time > flash)
+            {
+                flash = Time.time + 0.1f;
+                if (flashOn)
+                {
+                    GetComponent<Renderer>().enabled = true;
+                    flashOn = false;
+                }
+                else
+                {
+                    GetComponent<Renderer>().enabled = false;
+                    flashOn = true;
+                }
+            }
         }
     }
-
+    void Fire (bool shoot)
+    {
+        fire = shoot;
+    }
 	void FixedUpdate()
     {
         float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
@@ -56,15 +86,24 @@ public class playerMovement : MonoBehaviour
         rb.rotation = Quaternion.Euler((rb.velocity.x * -tilt) + 90.0f, 270.0f, 0.0f);
     }
 
+    IEnumerator InvincibleWait(float f)
+    {
+        yield return new WaitForSeconds(f);
+        GetComponent<Renderer>().enabled = true;
+        invincible = false;
+    }
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Asteroid")
+        if(!invincible)
         {
-            hp -= 1;
-        }
-        if (other.tag == "EnemyBullet")
-        {
-            hp -= 1;
-        }
+            if (other.tag == "Asteroid")
+            {
+                hp -= 1;
+            }
+            if (other.tag == "EnemyBullet")
+            {
+                hp -= 1;
+            }
+        } 
     }
 }

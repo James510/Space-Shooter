@@ -71,7 +71,7 @@ public class EnemyCore : MonoBehaviour
                     rb.AddForce(transform.up * speed);
                     movementSeq = 3;
                 }
-                else if (movementSeq == 3)
+                else if (movementSeq == 3) 
                 {
                     rb.AddForce(-transform.up * speed);
                     movementSeq = 4;
